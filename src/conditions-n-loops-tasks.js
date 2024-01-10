@@ -127,8 +127,15 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const romanNum = [
+    ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'],
+    ['', 'X', 'XX', 'XXX'],
+    ['', 'XL', 'L'],
+  ];
+  const remnant = num % 10;
+  const dozen = Math.floor(num / 10);
+  return `${romanNum[1][dozen]}${romanNum[0][remnant]}`;
 }
 
 /**
@@ -284,8 +291,21 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let leftSum = 0;
+  let rightSum = 0;
+  let result = -1;
+  for (let i = 1; i < arr.length; i += 1) {
+    rightSum += arr[i];
+  }
+  for (let i = 0; i < arr.length; i += 1) {
+    if (leftSum === rightSum) {
+      result = i;
+    }
+    leftSum += arr[i];
+    rightSum -= arr[i + 1];
+  }
+  return result;
 }
 
 /**
@@ -328,8 +348,20 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const result = matrix;
+  for (let i = 0; i < Math.floor(matrix.length / 2); i += 1) {
+    for (let j = i; j < matrix.length - i - 1; j += 1) {
+      const temp = result[i][j];
+      result[i][j] = matrix[matrix.length - 1 - j][i];
+      result[matrix.length - 1 - j][i] =
+        matrix[matrix.length - 1 - i][matrix.length - 1 - j];
+      result[matrix.length - 1 - i][matrix.length - 1 - j] =
+        matrix[j][matrix.length - 1 - i];
+      result[j][matrix.length - 1 - i] = temp;
+    }
+  }
+  return result;
 }
 
 /**
@@ -346,8 +378,33 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const char = arr[0];
+  let indexStart = 0;
+  let indexEnd = 0;
+  const result = arr;
+  const startArr = [];
+  const endArr = [];
+  if (result.length <= 1) {
+    return result;
+  }
+  for (let i = 1; i < result.length; i += 1) {
+    if (result[i] < char) {
+      startArr[indexStart] = result[i];
+      indexStart += 1;
+    } else {
+      endArr[indexEnd] = result[i];
+      indexEnd += 1;
+    }
+  }
+
+  const connectElem = [...sortByAsc(startArr), char, ...sortByAsc(endArr)];
+
+  for (let i = 0; i < result.length; i += 1) {
+    result[i] = connectElem[i];
+  }
+
+  return result;
 }
 
 /**
